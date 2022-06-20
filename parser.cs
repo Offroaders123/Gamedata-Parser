@@ -1,5 +1,14 @@
 // Written by /u/PhoenixARC-Real
 
+/*
+File format note from PhoenixARC:
+<Is the GAMEDATA an archive that has multiple files?>
+
+- Yeah, it's an archive with several files, if you've ever used mcc tool chest then those are the files inside it.
+- also, the first 4 bytes of the file is an int, the offset where the filenames are, each filename buffer is 144 bytes in length,
+  so it takes the total amount of files, multiplies it by 144, and takes that amount of data from the file at that offset
+*/
+
 using System;
 using System.IO;
 using System.Collections.Generic;

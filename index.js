@@ -1,71 +1,49 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-await CreatePS3UWorkingFile("./world/GAMEDATA");
+const gamedata = await fs.readFile("./world/GAMEDATA");
 
-async function CreatePS3UWorkingFile(inputFilePath){
-  const filenameBytes = await LoadFilenames(inputFilePath);
-  const bytes = await fs.readFile(inputFilePath);
+const files = parseGameData(gamedata);
 
-  for (const data of filenameBytes){
-    const data1 = decode(data,"utf-16be").split("\0")[0];
-    console.log(`"${data1}"`);
-    
-    // console.log(data);
-
-    const metadata = data.slice(128);
-    // console.log(...metadata);
-
-    const DataAmt = new DataView(new Uint8Array(metadata.slice(0,4)).buffer).getInt32();
-    const DataOffset = new DataView(new Uint8Array(metadata.slice(4,8)).buffer).getInt32();
-    // console.log(DataAmt);
-    // console.log(DataOffset);
-
-    const file = bytes.slice(DataOffset,DataAmt + DataOffset);
-    console.log(file);
-    // console.log(file.length);
-
-    const source = path.join("./world_extracted",data1);
-    console.log(`Saving file data to: ${source}\n`);
-
-    await fs.mkdir(path.dirname(source),{ recursive: true });
-    await fs.writeFile(source,file);
-  }
+for (const [name,data] of files){
+  const pathname = path.join("./world_data",name);
+  await fs.mkdir(path.dirname(pathname),{ recursive: true });
+  await fs.writeFile(pathname,data);
 }
 
-async function LoadFilenames(inputFilePath){
-  const data = await fs.readFile(inputFilePath);
-  const slice = data.slice(0,4);
-  const view = new DataView(slice.buffer);
-  const offset = view.getInt32();
+function parseGameData(data){
+  const chunks = parseFileChunks(data);
+  const files = [];
 
+  for (const chunk of chunks){
+    const name = new TextDecoder("utf-16be").decode(chunk).split("\0")[0];
+    // const name = new TextDecoder("utf-16be").decode(chunk).split("\0")[0].replace("-1r.","-1/r.");
+    // Second option fixes a naming bug for the naming of Nether region files.
+
+    const metadata = new Uint8Array(chunk.slice(128));
+    const size = new DataView(metadata.buffer).getInt32(0);
+    const offset = new DataView(metadata.buffer).getInt32(4);
+
+    const file = data.slice(offset,offset + size);
+    files.push([name,file]);
+  }
+
+  return files;
+}
+
+function parseFileChunks(data){
+  const offset = new DataView(data.buffer).getInt32();
   const names = data.slice(offset);
-  const chunks = chunk(names,144);
 
+  const chunks = chunkify(names,144);
   return chunks;
 }
 
-function endianReverseUnicode(buffer){
-  const result = Buffer.alloc(buffer.length);
-  for (let i = 0; i < buffer.length; i += 2){
-    result[i] = buffer[i + 1];
-    result[i + 1] = buffer[i];
+function chunkify(data,size){
+  const results = [];
+  for (let i = 0; i < data.length; i += size){
+    const chunk = data.slice(i,i + size);
+    results.push(chunk);
   }
-  return result;
-}
-
-function chunk(array,size){
-  const result = [];
-  for (let i = 0; i < array.length; i += size){
-    result.push(array.slice(i,i + size));
-  }
-  return result;
-}
-
-function encode(string){
-  return new TextEncoder().encode(string);
-}
-
-function decode(buffer,encoding){
-  return new TextDecoder(encoding).decode(buffer);
+  return results;
 }

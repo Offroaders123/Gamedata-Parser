@@ -1,6 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-// import zlib from "zlib";
 
 await CreatePS3UWorkingFile("./world/GAMEDATA");
 
@@ -14,11 +13,23 @@ async function CreatePS3UWorkingFile(inputFilePath){
     
     // console.log(data);
 
-    // const source = path.join("./world_extracted",data1);
-    // console.log(source);
+    const metadata = data.slice(128);
+    // console.log(...metadata);
 
-    // await fs.mkdir(path.dirname(source),{ recursive: true });
-    // await fs.writeFile(source,"placeholder hehe");
+    const DataAmt = new DataView(new Uint8Array(metadata.slice(0,4)).buffer).getInt32();
+    const DataOffset = new DataView(new Uint8Array(metadata.slice(4,8)).buffer).getInt32();
+    // console.log(DataAmt);
+    // console.log(DataOffset);
+
+    const file = bytes.slice(DataOffset,DataAmt + DataOffset);
+    console.log(file);
+    // console.log(file.length);
+
+    const source = path.join("./world_extracted",data1);
+    console.log(`Saving file data to: ${source}\n`);
+
+    await fs.mkdir(path.dirname(source),{ recursive: true });
+    await fs.writeFile(source,file);
   }
 }
 

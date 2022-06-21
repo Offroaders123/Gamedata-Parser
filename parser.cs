@@ -7,6 +7,17 @@ File format note from PhoenixARC:
 - Yeah, it's an archive with several files, if you've ever used mcc tool chest then those are the files inside it.
 - also, the first 4 bytes of the file is an int, the offset where the filenames are, each filename buffer is 144 bytes in length,
   so it takes the total amount of files, multiplies it by 144, and takes that amount of data from the file at that offset
+
+More help from PhoenixARC about the chained BitConverter methods:
+<Would you mind explaining how to calculate the offsets? I got the file name calculations working, but I'm not sure how I should
+implement the DataAmt and DataOffset sections, specifically the .Skip().Take().Reverse().ToArray() parts. I think I understand
+that it is clipping a view of the byte array to access the number which holds the data for how long the embedded file is and what
+it's offset is, but I'm having some trouble reverse-engineering exactly those calls are doing to the bytes to access those
+sections of the data, or at least where they are at in the byte stream. Thanks!>
+
+- .skip skips the byte array by the amount skip is specified so skip(11) skips to the file offset 0x0000000A. Take is the amount
+  of bytes to take, so .take(4) would result in {00, 00, 00, 00}, reverse reverses the resulting list, so {01, 02, 03, 04} turns
+  into {04, 03, 02, 01}. And toarray just turns a list of bytes into an array of bytes
 */
 
 using System;

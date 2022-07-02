@@ -1,3 +1,27 @@
 {
-  "type": "module"
+  "name": "gamedata-parser",
+  "version": "0.1.0",
+  "description": "An experimental script to parse Minecraft Legacy Console PS3 saves!",
+  "type": "module",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Offroaders123/Gamedata-Parser.git"
+  },
+  "keywords": [
+    "javascript",
+    "minecraft",
+    "nbt",
+    "savegame",
+    "ps3",
+    "save-editor",
+    "minecraft-console",
+    "minecraft-legacy-console-edition"
+  ],
+  "author": "Brandon Bennett <offroaders123@gmail.com> (https://github.com/Offroaders123)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Offroaders123/Gamedata-Parser/issues"
+  },
+  "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme"
 }

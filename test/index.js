@@ -2,7 +2,7 @@
 
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import * as GD from "../src/index.js";
+import * as GD from "../dist/index.js";
 
 const data = await fs.readFile(new URL("./world/GAMEDATA",import.meta.url));
 

@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "description": "An experimental script to parse Minecraft Legacy Console PS3 saves!",
   "type": "module",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Offroaders123/Gamedata-Parser.git"
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Offroaders123/Gamedata-Parser/issues"
   },
-  "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme"
+  "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
 }

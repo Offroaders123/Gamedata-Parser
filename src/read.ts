@@ -1,11 +1,8 @@
 import { chunkify } from "./chunkify.js";
 
-/**
- * @param { Uint8Array } data
-*/
-export function read(data){
+export function read(data: Uint8Array){
   const definitions = getDefinitions(data);
-  const result = /** @type { [string,Uint8Array][] } */ ([]);
+  const result: [string,Uint8Array][] = [];
 
   for (const definition of definitions){
     const name = new TextDecoder("utf-16be").decode(definition).split("\0")[0].replace("-1r.","-1/r.");
@@ -25,10 +22,7 @@ export function read(data){
   return result;
 }
 
-/**
- * @param { Uint8Array } data
-*/
-function getDefinitions(data){
+function getDefinitions(data: Uint8Array){
   const view = new DataView(data.buffer);
   const offset = view.getInt32(0);
   const names = data.slice(offset);

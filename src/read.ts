@@ -1,5 +1,3 @@
-import { chunkify } from "./chunkify.js";
-
 export function read(data: Uint8Array){
   const definitions = getDefinitions(data);
   const result: [string,Uint8Array][] = [];
@@ -28,5 +26,15 @@ function getDefinitions(data: Uint8Array){
   const names = data.slice(offset);
 
   const result = chunkify(names,144);
+  return result;
+}
+
+export function chunkify(data: Uint8Array, length: number){
+  const result = [];
+  for (let i = 0; i < data.length; i += length){
+    const size = i + length;
+    const chunk = data.slice(i,size);
+    result.push(chunk);
+  }
   return result;
 }

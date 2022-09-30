@@ -2,5 +2,7 @@
 ._*
 Desktop.ini
 Thumbs.db
-node_modules/
-world_data/
+
+/node_modules
+/dist
+/test/world_data

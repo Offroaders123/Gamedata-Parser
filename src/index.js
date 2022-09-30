@@ -1,6 +1,2 @@
-import read from "./read.js";
-import chunkify from "./chunkify.js";
-
-export { read, chunkify };
-
-export default { read, chunkify, [Symbol.toStringTag]: "GD" };
+export * from "./read.js";
+export * from "./chunkify.js";

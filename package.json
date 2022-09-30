@@ -1,9 +1,9 @@
 {
   "name": "gamedata-parser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An experimental script to parse Minecraft Legacy Console PS3 saves!",
   "type": "module",
-  "main": "index.js",
+  "main": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Offroaders123/Gamedata-Parser.git"

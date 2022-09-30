@@ -1,13 +1,15 @@
-import { promises as fs } from "fs";
-import path from "path";
-import GD from "../src/index.js";
+// @ts-check
 
-const data = await fs.readFile("./test/world/GAMEDATA");
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import * as GD from "../src/index.js";
+
+const data = await fs.readFile(new URL("./world/GAMEDATA",import.meta.url));
 
 const files = GD.read(data);
 
 for (const [name,data] of files){
-  const pathname = path.join("./test/world_data",name);
+  const pathname = decodeURIComponent(new URL(path.join("./world_data",name),import.meta.url).pathname);
   console.log(name);
   await fs.mkdir(path.dirname(pathname),{ recursive: true });
   await fs.writeFile(pathname,data);

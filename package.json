@@ -25,6 +25,9 @@
     "url": "https://github.com/Offroaders123/Gamedata-Parser/issues"
   },
   "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme",
+  "dependencies": {
+    "mcregionjs": "file:../MCRegionJS"
+  },
   "devDependencies": {
     "typescript": "^4.8.4"
   }

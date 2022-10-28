@@ -1,16 +1,17 @@
 // @ts-check
 
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import * as GD from "../dist/index.js";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { join, dirname } from "node:path";
+import Gamedata from "../dist/index.js";
 
-const data = await fs.readFile(new URL("./world/GAMEDATA",import.meta.url));
+const data = await readFile(new URL("./world/GAMEDATA",import.meta.url));
 
-const files = GD.read(data);
+const files = Gamedata.read(data);
 
-for (const [name,data] of files){
-  const pathname = decodeURIComponent(new URL(path.join("./world_data",name),import.meta.url).pathname);
-  console.log(name);
-  await fs.mkdir(path.dirname(pathname),{ recursive: true });
-  await fs.writeFile(pathname,data);
+for (const file of files){
+  console.log(file);
+  const path = decodeURIComponent(new URL(join("./world_data",file.name),import.meta.url).pathname);
+
+  await mkdir(dirname(path),{ recursive: true });
+  writeFile(path,file.data);
 }

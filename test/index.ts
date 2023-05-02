@@ -1,8 +1,6 @@
-// @ts-check
-
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
-import { readGamedata } from "../dist/index.js";
+import { readGamedata } from "../src/index.js";
 
 const data = await readFile(new URL("./world/GAMEDATA",import.meta.url));
 

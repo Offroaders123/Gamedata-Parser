@@ -1,13 +1,13 @@
 {
   "name": "gamedata-parser",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "private": true,
   "description": "An experimental script to parse Minecraft Legacy Console PS3 saves!",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project ./tsconfig.build.json",
     "dev": "tsc -w"
   },
   "repository": {
@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme",
   "devDependencies": {
+    "@types/node": "^18.16.3",
     "typescript": "^5.0.4"
   }
 }

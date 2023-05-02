@@ -6,16 +6,8 @@ export interface Definition {
 
 export function read(data: Uint8Array){
   const definitions = readDefinitions(data);
-
-  const result: File[] = [];
-
-  for (const { name, offset, length } of definitions){
-    const content = data.subarray(offset,offset + length);
-    const file = new File([content],name);
-    result.push(file);
-  }
-
-  return result;
+  const files = definitions.map(definition => getFile(data,definition));
+  return files;
 }
 
 export function getDefinitions(data: Uint8Array){
@@ -26,13 +18,16 @@ export function getDefinitions(data: Uint8Array){
 }
 
 export function readDefinitions(data: Uint8Array){
-  const definitions = getDefinitions(data);
-  const result: Definition[] = [];
+  const definitionsBlock = getDefinitions(data);
+  const definitions = [...readDefinition(definitionsBlock)];
+  return definitions;
+}
 
-  for (let i = 0; i < definitions.byteLength; i += 144){
-    const definition = definitions.subarray(i,i + 144);
+export function* readDefinition(data: Uint8Array): Generator<Definition,void,void> {
+  for (let i = 0; i < data.byteLength; i += 144){
+    const definition = data.subarray(i,i + 144);
+    /** Replace call fixes a naming inconsistency for Nether region files. */
     const name = new TextDecoder("utf-16be").decode(definition).split("\0")[0].replace("-1r.","-1/r.");
-    // Replace call fixes a naming inconsistency for Nether region files.
 
     const header = definition.subarray(128);
     const view = new DataView(header.buffer,header.byteOffset,header.byteLength);
@@ -40,8 +35,12 @@ export function readDefinitions(data: Uint8Array){
     const length = view.getUint32(0);
     const offset = view.getUint32(4);
 
-    result.push({ name, offset, length });
+    yield { name, offset, length };
   }
+}
 
-  return result;
+export function getFile(data: Uint8Array, { name, offset, length }: Definition){
+  const content = data.subarray(offset,offset + length);
+  const file = new File([content],name);
+  return file;
 }

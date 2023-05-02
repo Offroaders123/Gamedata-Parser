@@ -2,7 +2,7 @@
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
-import Gamedata from "../dist/index.js";
+import * as Gamedata from "../dist/index.js";
 
 const data = await readFile(new URL("./world/GAMEDATA",import.meta.url));
 
@@ -13,5 +13,5 @@ for (const file of files){
   const path = decodeURIComponent(new URL(join("./world_data",file.name),import.meta.url).pathname);
 
   await mkdir(dirname(path),{ recursive: true });
-  writeFile(path,file.data);
+  writeFile(path,new Uint8Array(await file.arrayBuffer()));
 }

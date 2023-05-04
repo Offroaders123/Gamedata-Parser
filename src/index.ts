@@ -1,29 +1,29 @@
-export interface GamedataDefinition {
+export interface Definition {
   name: string;
   offset: number;
   length: number;
 }
 
-export function readGamedata(data: Uint8Array){
-  const definitions = readGamedataDefinitions(data);
+export function read(data: Uint8Array){
+  const definitions = readDefinitions(data);
   const files = definitions.map(definition => getFile(data,definition));
   return files;
 }
 
-export function getGamedataDefinitions(data: Uint8Array){
+function getDefinitions(data: Uint8Array){
   const view = new DataView(data.buffer,data.byteOffset,data.byteLength);
   const offset = view.getUint32(0);
   const definitions = data.subarray(offset);
   return definitions;
 }
 
-export function readGamedataDefinitions(data: Uint8Array){
-  const definitionsBlock = getGamedataDefinitions(data);
-  const definitions = [...readGamedataDefinition(definitionsBlock)];
+export function readDefinitions(data: Uint8Array){
+  const definitionsBlock = getDefinitions(data);
+  const definitions = [...readDefinition(definitionsBlock)];
   return definitions;
 }
 
-export function* readGamedataDefinition(data: Uint8Array): Generator<GamedataDefinition,void,void> {
+function* readDefinition(data: Uint8Array): Generator<Definition,void,void> {
   for (let i = 0; i < data.byteLength; i += 144){
     const definition = data.subarray(i,i + 144);
     /** Replace call fixes a naming inconsistency for Nether region files. */
@@ -39,7 +39,7 @@ export function* readGamedataDefinition(data: Uint8Array): Generator<GamedataDef
   }
 }
 
-export function getFile(data: Uint8Array, { name, offset, length }: GamedataDefinition){
+function getFile(data: Uint8Array, { name, offset, length }: Definition){
   const content = data.subarray(offset,offset + length);
   const file = new File([content],name);
   return file;

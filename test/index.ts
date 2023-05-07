@@ -2,8 +2,9 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { read } from "../src/index.js";
 
-const data = await readFile(new URL("./world/GAMEDATA",import.meta.url));
+const GAMEDATA = new URL("./world/GAMEDATA",import.meta.url);
 
+const data = await readFile(GAMEDATA);
 const files = read(data);
 
 for (const file of files){

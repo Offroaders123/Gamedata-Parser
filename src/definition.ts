@@ -12,7 +12,8 @@ export interface Definition {
 }
 
 export function* readDefinitions(data: Uint8Array): Generator<Definition,void,void> {
-  const { byteOffset, byteLength } = readHeader(data);
+  const { byteOffset, length } = readHeader(data);
+  const byteLength = DEFINITION_LENGTH * length;
   const view = new DataView(data.buffer,data.byteOffset,data.byteLength);
 
   for (let i = byteOffset; i < byteOffset + byteLength; i += DEFINITION_LENGTH){

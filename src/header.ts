@@ -5,9 +5,9 @@ export interface Header {
   length: number;
 }
 
-export function readHeader(data: Uint8Array): Header {
+export function readHeader(data: Uint8Array, littleEndian: boolean): Header {
   const view = new DataView(data.buffer,data.byteOffset,HEADER_LENGTH);
-  const byteOffset = view.getUint32(0,true);
-  const length = view.getUint32(4,true);
+  const byteOffset = view.getUint32(0,littleEndian);
+  const length = view.getUint32(4,littleEndian);
   return { byteOffset, length };
 }

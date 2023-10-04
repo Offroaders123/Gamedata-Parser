@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { read } from "../src/index.js";
 
-const GAMEDATA = new URL("./ps4/GAMEDATA",import.meta.url);
+const GAMEDATA = new URL("./ps4/00000005/savedata0/GAMEDATA",import.meta.url);
 
 const data = await readFile(GAMEDATA);
 const files = read(data,"ps4");

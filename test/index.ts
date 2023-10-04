@@ -11,7 +11,7 @@ const files = await readdir(WORLD,{ recursive: true, withFileTypes: true })
       .map(async ({ name, path }) => {
         const pathname = join(path,name);
         const buffer = await readFile(pathname);
-        return new File([buffer],pathname);
+        return new File([buffer],pathname.split("ps4/").pop()!);
       })
   ));
 console.log(files);

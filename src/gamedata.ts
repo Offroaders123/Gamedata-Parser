@@ -3,7 +3,7 @@ import { readDefinitions } from "./definition.js";
 
 import type { Platform } from "./platform.js";
 
-export function* read(data: Uint8Array, platform: Platform): Generator<File,void,void> {
+export function* readGamedata(data: Uint8Array, platform: Platform): Generator<File,void,void> {
   if (platform === "ps4"){
     data = inflateSync(data.subarray(8));
     console.log(data);

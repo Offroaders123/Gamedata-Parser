@@ -2,11 +2,25 @@ import { readFile, writeFile, readdir, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { readGamedata, readRegion } from "../src/index.js";
 
+const WORLD = new URL("./ps4",import.meta.url);
+
+const files = await readdir(WORLD,{ recursive: true, withFileTypes: true })
+  .then(entries => 
+    Promise.all(entries
+      .filter(entry => entry.isFile())
+      .map(async ({ name, path }) => {
+        const pathname = join(path,name);
+        const buffer = await readFile(pathname);
+        return new File([buffer],pathname);
+      })
+  ));
+console.log(files);
+
 // const GAMEDATA = new URL("./ps4/GAMEDATA",import.meta.url);
 
-const REGIONS = (await readdir(new URL("./ps4",import.meta.url),{ withFileTypes: true }))
-  .filter(entry => entry.isFile() && /^GAMEDATA_/.test(entry.name))
-  .map(entry => new URL(join("./ps4",entry.name),import.meta.url));
+// const REGIONS = (await readdir(new URL("./ps4",import.meta.url),{ withFileTypes: true }))
+//   .filter(entry => entry.isFile() && /^GAMEDATA_/.test(entry.name))
+//   .map(entry => new URL(join("./ps4",entry.name),import.meta.url));
 
 // const data = await readFile(GAMEDATA);
 // const files = readGamedata(data,"ps4");
@@ -19,9 +33,9 @@ const REGIONS = (await readdir(new URL("./ps4",import.meta.url),{ withFileTypes:
 //   writeFile(path,new Uint8Array(await file.arrayBuffer()));
 // }
 
-const regionData = await Promise.all(REGIONS.map(entry => readFile(entry)));
-const regionFiles = regionData.map(readRegion);
+// const regionData = await Promise.all(REGIONS.map(entry => readFile(entry)));
+// const regionFiles = regionData.map(readRegion);
 
-for (const region of regionFiles){
-  // console.log(region);
-}
+// for (const region of regionFiles){
+//   // console.log(region);
+// }

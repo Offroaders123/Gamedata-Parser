@@ -4,28 +4,13 @@ import { readGamedata, readRegion } from "../src/index.js";
 
 const WORLD = decodeURIComponent(new URL("./ps4",import.meta.url).pathname);
 
-const oldFilter = Array.prototype.filter;
-
-declare global {
-  interface Array<T> {
-    asyncFilter(...args: Parameters<typeof Array.prototype.filter>): Promise<T[]>;
-  }
-}
-
-Array.prototype.asyncFilter = async function(...args: Parameters<typeof Array.prototype.filter>){
-  const result = oldFilter.call(this,...args);
-  await Promise.all(result);
-  return result;
-};
-
-async function walk(dir: string) {
-  const entries = (await readdir(dir,{ recursive: true })).asyncFilter(async entry => {
-    const path = join(dir,entry);
-    const stats = await stat(path);
-    console.log(stats.isDirectory());
-    return stats.isFile();
-  });
-  return entries;
+async function walk(dir: string): Promise<File[]> {
+  const entries = await readdir(dir,{ recursive: true });
+  const files = await Promise.all((await Promise.all(entries
+      .map(async entry => [await stat(join(dir,entry)),entry] as const)))
+    .filter(([stats]) => stats.isFile())
+    .map(async ([stats,entry]) => new File([await readFile(join(dir,entry))],entry,{ lastModified: stats.mtimeMs })));
+  return files;
 }
 
 const files = await walk(WORLD);

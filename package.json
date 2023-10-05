@@ -30,6 +30,9 @@
     "url": "https://github.com/Offroaders123/Gamedata-Parser/issues"
   },
   "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme",
+  "dependencies": {
+    "file-system-access": "^1.0.4"
+  },
   "devDependencies": {
     "@types/node": "^18.18.1",
     "typescript": "^5.2.2"

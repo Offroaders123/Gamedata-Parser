@@ -1,15 +1,17 @@
 import { readFile, writeFile, readdir, mkdir, stat } from "node:fs/promises";
 import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { readGamedata, readRegion } from "../src/index.js";
 
-const WORLD = decodeURIComponent(new URL("./ps4",import.meta.url).pathname);
+const WORLD = new URL("./ps4",import.meta.url);
 
-async function walk(dir: string): Promise<File[]> {
+async function walk(dir: string | URL): Promise<File[]> {
+  const root = fileURLToPath(dir);
   const entries = await readdir(dir,{ recursive: true });
   const files = await Promise.all((await Promise.all(entries
-      .map(async entry => [await stat(join(dir,entry)),entry] as const)))
+      .map(async entry => [await stat(join(root,entry)),entry] as const)))
     .filter(([stats]) => stats.isFile())
-    .map(async ([stats,entry]) => new File([await readFile(join(dir,entry))],entry,{ lastModified: stats.mtimeMs })));
+    .map(async ([stats,entry]) => new File([await readFile(join(root,entry))],entry,{ lastModified: stats.mtimeMs })));
   return files;
 }
 

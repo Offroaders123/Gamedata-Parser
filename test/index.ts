@@ -2,10 +2,10 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { readGamedata } from "../src/index.js";
 
-const GAMEDATA = new URL("./ps4/GAMEDATA",import.meta.url);
+const GAMEDATA = new URL("./360/savegame.dat",import.meta.url);
 
 const data = await readFile(GAMEDATA);
-const files = readGamedata(data,"ps4");
+const files = readGamedata(data,"360");
 
 for (const file of files){
   console.log(file);

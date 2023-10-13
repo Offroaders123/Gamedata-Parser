@@ -40,7 +40,6 @@ if (f_in === null) {
 }
 let decompressFileOutput: Uint8Array;
 let sizeOfdecompressFileOutput: bigint;
-let saveGameInfo: SavefileInfo;
 const header = new Uint8Array(0xc);
 fseek(f_in, 0, SEEK_SET);
 fread(header, 1, 12, f_in);
@@ -64,10 +63,9 @@ if (sizeOfdecompressFileOutput === 0n) {
 console.log("Detected Xbox360 .dat savefile, converting\n");
 
 //1139 vs 1343
-ConvertInit.initConverter(1, 0, 12.2);
 const dataOfInputFile = new DataInputManager(decompressFileOutput, Number(sizeOfdecompressFileOutput), false);//we will free the data manually later
 dataOfInputFile.seek(8);
 const oldestVersion = dataOfInputFile.getInt16(0);
 const currentVersion = dataOfInputFile.getInt16(2);
 dataOfInputFile.seekStart();
-const files: SaveFilesGroupListing = readSavefileFiles(dataOfInputFile, platform);
+const files: File[] = [...readGamedata(new Uint8Array(dataOfInputFile.buffer,dataOfInputFile.byteOffset,dataOfInputFile.byteLength), platform)];

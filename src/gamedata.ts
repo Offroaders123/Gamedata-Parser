@@ -1,5 +1,6 @@
 import { inflateSync } from "node:zlib";
 import { readDefinitions } from "./definition.js";
+import { XDecompress } from "./compression.js";
 
 import type { Platform } from "./platform.js";
 
@@ -52,7 +53,7 @@ const src = new Uint8Array(sizeOfSrc);
 const dst = new Uint8Array(Number(sizeOfdecompressFileOutput));
 decompressFileOutput = dst;
 fread(src, 1, sizeOfSrc, f_in);
-sizeOfdecompressFileOutput = XDecompress(src, dst, sizeOfSrc, sizeOfdecompressFileOutput);
+sizeOfdecompressFileOutput = BigInt(XDecompress(src, dst, BigInt(sizeOfSrc), sizeOfdecompressFileOutput));
 free(src);
 if (sizeOfdecompressFileOutput === 0n) {
     console.log("Not a Minecraft console savefile, exiting\n");

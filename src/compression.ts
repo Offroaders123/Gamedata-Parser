@@ -6,6 +6,15 @@ function seek(input: Uint8Array, byteLength: number): Uint8Array {
   return new Uint8Array(input.buffer,input.byteOffset + byteLength,input.byteLength - byteLength);
 }
 
+type lzx_state = unknown;
+function lzx_init(_window: number): lzx_state {
+    return void 0;
+}
+function lzx_decompress(_pState: lzx_state, _inPos: Uint8Array, _outPos: Uint8Array, _inlen: number, _outlen: number): number {
+    return 2;
+}
+function lzx_teardown(_pState: lzx_state): void {}
+
 //the max "amount" here is 0xffff which is only 2^16 - 1 so it won't over flow (0xff < 8) | 0xff
 export function hasOverFlow(bytesRead: number, size: number, amount: number): number {
     if (bytesRead + amount > size) {

@@ -5,7 +5,7 @@ import { readGamedata } from "../src/index.js";
 const GAMEDATA = new URL("./ps3/GAMEDATA",import.meta.url);
 
 const data = await readFile(GAMEDATA);
-const files = readGamedata(data,"ps3");
+const files = await readGamedata(data,"ps3");
 
 for (const file of files){
   console.log(file);

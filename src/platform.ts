@@ -1,1 +1,0 @@
-export type Platform = "ps3" | "ps4" | "360";

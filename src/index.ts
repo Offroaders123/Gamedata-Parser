@@ -1,4 +1,38 @@
-export * from "./gamedata.js";
-export * from "./header.js";
-export * from "./definition.js";
-export * from "./platform.js";
+import { decompress } from "nbtify";
+
+export type Platform = "ps3" | "ps4" | "xbox-360";
+
+export const DEFINITION_LENGTH = 144;
+export const NAME_LENGTH = 128;
+
+export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
+  if (platform === "ps4"){
+    data = await decompress(data, "deflate");
+  }
+
+  if (platform === "xbox-360"){
+    // needs to be reimplemented
+  }
+
+  const littleEndian: boolean = platform === "ps4";
+  const decoder = new TextDecoder(littleEndian ? "utf-16" : "utf-16be");
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+
+  const byteOffset: number = view.getUint32(0, littleEndian);
+  const byteLength: number = DEFINITION_LENGTH * view.getUint32(4, littleEndian);
+
+  const files: File[] = [];
+
+  for (let i = byteOffset; i < byteOffset + byteLength; i += DEFINITION_LENGTH){
+    const name: string = decoder
+      .decode(data.subarray(i, i + NAME_LENGTH))
+      .split("\0")[0]!
+      // Fixes the naming inconsistency for Nether files within the 'DIM-1' directory.
+      .replace("DIM-1","DIM-1/");
+    const byteLength: number = view.getUint32(i + NAME_LENGTH, littleEndian);
+    const byteOffset: number = view.getUint32(i + NAME_LENGTH + 4, littleEndian);
+    files.push(new File([data.subarray(byteOffset, byteOffset + byteLength)], name));
+  }
+
+  return files;
+}

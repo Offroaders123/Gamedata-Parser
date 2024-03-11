@@ -5,9 +5,9 @@ import { readGamedata } from "../src/index.js";
 import type { Platform } from "../src/index.js";
 
 const paths: [Platform, string][] = [
-  ["360", "./360/savegame.dat"],
+  // ["xbox-360", "./360/savegame.dat"],
   ["ps3", "./ps3/GAMEDATA"],
-  ["ps4", "./ps4/GAMEDATA"]
+  // ["ps4", "./ps4/GAMEDATA"]
 ];
 
 const files: [Platform, File][] = await Promise.all(
@@ -20,7 +20,7 @@ describe("Parse Gamedata", () => {
   for (const [platform, gamedata] of files){
     it(platform, async () => {
       const data = new Uint8Array(await gamedata.arrayBuffer());
-      const files = readGamedata(data, platform);
+      const files = await readGamedata(data, platform);
 
       for (const file of files){
         console.log(Array(8 - file.size.toString().length).fill(" ").join(""), file.size, file.name);

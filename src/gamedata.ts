@@ -6,7 +6,7 @@ import type { Platform } from "./platform.js";
 export function* readGamedata(data: Uint8Array, platform: Platform): Generator<File,void,void> {
   if (platform === "ps4"){
     data = inflateSync(data.subarray(8));
-    console.log(data);
+    // console.log(data);
   }
   if (platform === "360"){
   }

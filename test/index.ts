@@ -9,6 +9,7 @@ const files = readGamedata(data,"ps3");
 
 for (const file of files){
   console.log(file);
+  // console.log(Array(8 - file.size.toString().length).fill(" ").join(""), file.size, file.name);
   const path = decodeURIComponent(new URL(join("./world_data",file.name),import.meta.url).pathname);
 
   await mkdir(dirname(path),{ recursive: true });

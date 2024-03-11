@@ -8,7 +8,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json",
-    "dev": "tsc -w"
+    "dev": "tsc --watch",
+    "test": "tsx --test --watch ./test/index.test.ts"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
   "homepage": "https://github.com/Offroaders123/Gamedata-Parser#readme",
   "devDependencies": {
     "@types/node": "^20.11.25",
+    "tsx": "^4.7.1",
     "typescript": "^5.4.2"
   },
   "sideEffects": false

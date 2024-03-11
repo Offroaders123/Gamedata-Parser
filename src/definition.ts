@@ -13,7 +13,7 @@ export function* readDefinitions(data: Uint8Array, littleEndian: boolean): Gener
   const decoder = new TextDecoder(littleEndian ? "utf-16" : "utf-16be");
 
   const { byteOffset, length } = readHeader(data,littleEndian);
-  console.log(byteOffset,length);
+  // console.log(byteOffset,length);
   const byteLength = DEFINITION_LENGTH * length;
   const view = new DataView(data.buffer,data.byteOffset,data.byteLength);
 

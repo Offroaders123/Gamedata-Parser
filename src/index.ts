@@ -36,3 +36,7 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
 
   return files;
 }
+
+export async function writeGamedata(data: File[], platform: Platform): Promise<Uint8Array> {
+  return new Uint8Array();
+}

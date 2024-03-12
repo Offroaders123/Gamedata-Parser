@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
+import { strictEqual } from "node:assert";
 import { readFile } from "node:fs/promises";
-import { readGamedata } from "../src/index.js";
+import { readGamedata, writeGamedata } from "../src/index.js";
 
 import type { Platform } from "../src/index.js";
 
@@ -25,6 +26,11 @@ describe("Parse Gamedata", () => {
       for (const file of files){
         console.log(Array(8 - file.size.toString().length).fill(" ").join(""), file.size, file.name);
       }
+
+      const recompile = await writeGamedata(files, platform);
+
+      const compare = Buffer.compare(data, recompile);
+      strictEqual(compare, 0, `'${gamedata.name}' does not symmetrically recompile`);
     });
   }
 });

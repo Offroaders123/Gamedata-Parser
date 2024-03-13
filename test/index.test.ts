@@ -6,9 +6,9 @@ import { readGamedata } from "../src/index.js";
 import type { Platform } from "../src/index.js";
 
 const paths: [Platform, string][] = [
-  // ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
+  ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
   ["ps3", "./ps3/GAMEDATA"],
-  // ["wii-u", "./wii-u/savegame-decompressed.wii"],
+  ["wii-u", "./wii-u/savegame-decompressed.wii"],
   // ["ps4", "./ps4/GAMEDATA"]
 ];
 
@@ -24,6 +24,7 @@ describe("Parse Gamedata", () => {
       const data = new Uint8Array(await gamedata.arrayBuffer());
       const files = await readGamedata(data, platform);
 
+      console.log(`--------- ${platform} ---------`);
       for (const file of files){
         console.log(Array(8 - file.size.toString().length).fill(" ").join(""), file.size, file.name);
       }

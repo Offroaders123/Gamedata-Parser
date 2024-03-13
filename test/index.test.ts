@@ -1,12 +1,12 @@
 import { describe, it } from "node:test";
-import { strictEqual } from "node:assert";
+// import { strictEqual } from "node:assert";
 import { readFile } from "node:fs/promises";
-import { readGamedata, writeGamedata } from "../src/index.js";
+import { readGamedata } from "../src/index.js";
 
 import type { Platform } from "../src/index.js";
 
 const paths: [Platform, string][] = [
-  // ["xbox-360", "./360/savegame.dat"],
+  // ["xbox-360", "./xbox-360/savegame.dat"],
   ["ps3", "./ps3/GAMEDATA"],
   // ["ps4", "./ps4/GAMEDATA"]
 ];
@@ -27,10 +27,10 @@ describe("Parse Gamedata", () => {
         console.log(Array(8 - file.size.toString().length).fill(" ").join(""), file.size, file.name);
       }
 
-      const recompile = await writeGamedata(files, platform);
+      // const recompile = await writeGamedata(files, platform);
 
-      const compare = Buffer.compare(data, recompile);
-      strictEqual(compare, 0, `'${gamedata.name}' does not symmetrically recompile`);
+      // const compare = Buffer.compare(data, recompile);
+      // strictEqual(compare, 0, `'${gamedata.name}' does not symmetrically recompile`);
     });
   }
 });

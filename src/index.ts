@@ -10,6 +10,15 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
     data = await decompress(data, "deflate");
   }
 
+  if (platform === "wii-u"){
+    // const view = new DataView(data.buffer, data.byteOffset, 8);
+    // const a: number = view.getUint32(0);
+    // const b: number = view.getUint32(4);
+    // console.log(a, b);
+    data = await decompress(data.subarray(8), "deflate");
+    // console.log(data.byteLength);
+  }
+
   if (platform === "xbox-360"){
     // needs to be reimplemented
   }

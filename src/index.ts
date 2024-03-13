@@ -1,6 +1,6 @@
 import { decompress } from "nbtify";
 
-export type Platform = "ps3" | "ps4" | "xbox-360";
+export type Platform = "ps3" | "ps4" | "wii-u" | "xbox-360";
 
 export const DEFINITION_LENGTH = 144;
 export const NAME_LENGTH = 128;

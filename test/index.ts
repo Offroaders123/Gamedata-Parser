@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { readGamedata } from "../src/index.js";
 
-const GAMEDATA = new URL("./ps3/GAMEDATA",import.meta.url);
+const GAMEDATA = new URL("./xbox-360/savegame-decompressed.dat",import.meta.url);
 
 const data = await readFile(GAMEDATA);
 const files = await readGamedata(data,"ps3");

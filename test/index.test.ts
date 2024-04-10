@@ -6,10 +6,10 @@ import { readGamedata } from "../src/index.js";
 import type { Platform } from "../src/index.js";
 
 const paths: [Platform, string][] = [
-  ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
-  ["ps3", "./ps3/GAMEDATA"],
-  ["ps-vita", "./ps-vita/GAMEDATA.bin"],
-  ["wii-u", "./wii-u/savegame.wii"],
+  // ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
+  // ["ps3", "./ps3/GAMEDATA"],
+  ["ps-vita", "./ps-vita/GAMEDATA-3.bin"],
+  // ["wii-u", "./wii-u/savegame.wii"],
   // ["ps4", "./ps4/GAMEDATA"]
 ];
 

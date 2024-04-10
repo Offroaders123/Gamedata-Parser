@@ -1,4 +1,4 @@
-import { decompress } from "nbtify";
+import { decompress, runLengthDecode } from "./compression.js";
 
 export type Platform = "ps-vita" | "ps3" | "ps4" | "wii-u" | "xbox-360";
 
@@ -6,6 +6,12 @@ export const DEFINITION_LENGTH = 144;
 export const NAME_LENGTH = 128;
 
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
+  if (platform === "ps-vita"){
+    console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
+    data = runLengthDecode(data, 0x10000);
+    data = await decompress(data, "deflate");
+  }
+
   if (platform === "ps4"){
     data = await decompress(data, "deflate");
   }

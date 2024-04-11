@@ -1,3 +1,4 @@
+import { writeFile } from "node:fs/promises";
 import { decompress, runLengthDecode } from "./compression.js";
 
 export type Platform = "ps-vita" | "ps3" | "ps4" | "wii-u" | "xbox-360";
@@ -8,8 +9,11 @@ export const NAME_LENGTH = 128;
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
   if (platform === "ps-vita"){
     console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
-    data = runLengthDecode(data, 0x10000);
-    data = await decompress(data, "deflate");
+    const result: number[] = [];
+    runLengthDecode(data, 0x10000, result);
+    data = new Uint8Array(result);
+    await writeFile("./output.bin", data);
+    // data = await decompress(data, "deflate");
   }
 
   if (platform === "ps4"){
@@ -35,6 +39,7 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
 
   const byteOffset: number = view.getUint32(0, littleEndian);
   const byteLength: number = DEFINITION_LENGTH * view.getUint32(4, littleEndian);
+  console.log(byteOffset, byteLength);
 
   const files: File[] = [];
 
@@ -44,6 +49,7 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
       .split("\0")[0]!
       // Fixes the naming inconsistency for Nether files within the 'DIM-1' directory.
       .replace("DIM-1","DIM-1/");
+    console.log(name);
     const byteLength: number = view.getUint32(i + NAME_LENGTH, littleEndian);
     const byteOffset: number = view.getUint32(i + NAME_LENGTH + 4, littleEndian);
     files.push(new File([data.subarray(byteOffset, byteOffset + byteLength)], name));

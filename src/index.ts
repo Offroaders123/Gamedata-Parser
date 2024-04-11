@@ -8,8 +8,7 @@ export const NAME_LENGTH = 128;
 
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
   if (platform === "ps-vita"){
-    // console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
-    data = runLengthDecode(data);
+    data = runLengthDecode(data.subarray(8));
     await writeFile("./output2.bin", data);
   }
 
@@ -34,9 +33,8 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
   const decoder = new TextDecoder(littleEndian ? "utf-16" : "utf-16be");
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
 
-  const byteOffset: number = 0x00AADDFF;//view.getUint32(0, littleEndian);
-  const byteLength: number = DEFINITION_LENGTH * 18;//view.getUint32(4, littleEndian);
-  console.log(byteOffset, byteLength);
+  const byteOffset: number = view.getUint32(0, littleEndian);
+  const byteLength: number = DEFINITION_LENGTH * view.getUint32(4, littleEndian);
 
   const files: File[] = [];
 

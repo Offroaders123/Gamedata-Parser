@@ -45,7 +45,7 @@ function RLEVITA_DECOMPRESS(dataIn: Uint8Array): Uint8Array {
     inByteIndex++;
     if (byte !== 0x00) {
       dataOut.push(byte);
-      // inByteIndex++;
+      outByteIndex++;
     } else {
       const numZeros: number = dataIn[inByteIndex]!;
       inByteIndex++;

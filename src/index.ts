@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { decompress, runLengthDecode } from "./compression.js";
 
 export type Platform = "ps-vita" | "ps3" | "ps4" | "wii-u" | "xbox-360";
@@ -10,7 +10,8 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
   if (platform === "ps-vita"){
     console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
     data = runLengthDecode(data);
-    await writeFile("./output.bin", data);
+    console.log(Buffer.compare(await readFile("./output.bin"), data));
+    await writeFile("./output2.bin", data);
     // data = await decompress(data, "deflate");
   }
 

@@ -9,9 +9,7 @@ export const NAME_LENGTH = 128;
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
   if (platform === "ps-vita"){
     console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
-    const result: number[] = [];
-    runLengthDecode(data, 0x10000, result);
-    data = new Uint8Array(result);
+    data = runLengthDecode(data);
     await writeFile("./output.bin", data);
     // data = await decompress(data, "deflate");
   }

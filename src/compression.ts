@@ -2,7 +2,7 @@ export { compress, decompress } from "nbtify";
 
 export { RLEVITA_DECOMPRESS as runLengthDecode };
 
-let inByteIndex: number = 0;
+// let inByteIndex: number = 0;
 
 /**
  * Fills a portion of an array with a specified value.
@@ -17,13 +17,13 @@ function memset(array: number[] | Uint8Array, value: number, start: number, leng
 //   return dataIn.slice(offset);
 // }
 
-/**
- * @param dataIn The data
- * @returns The byte.
- */
-function readByte(dataIn: Uint8Array): number {
-  return dataIn[inByteIndex++]!;
-}
+// /**
+//  * @param dataIn The data
+//  * @returns The byte.
+//  */
+// function readByte(dataIn: Uint8Array): number {
+//   return dataIn[inByteIndex++]!;
+// }
 
 /**
  * @param dataIn The compressed data
@@ -35,20 +35,24 @@ function readByte(dataIn: Uint8Array): number {
  * This is Zugebot (jerrinth3glitch)'s code ported to JS (mostly complete but not working!!!)
  * https://github.com/zugebot/LegacyEditor
  */
-function RLEVITA_DECOMPRESS(dataIn: Uint8Array, sizeIn: number = dataIn.byteLength, dataOut: number[] | Uint8Array): number {
+function RLEVITA_DECOMPRESS(dataIn: Uint8Array): Uint8Array {
+  let inByteIndex: number = 0;
   let outByteIndex: number = 0;
+  let dataOut: number[] = [];
 
-  while (inByteIndex < sizeIn) {
-    let byte: number = readByte(dataIn);
-
+  while (inByteIndex < dataIn.byteLength) {
+    let byte: number = dataIn[inByteIndex]!;
+    inByteIndex++;
     if (byte !== 0x00) {
-      dataOut[outByteIndex++] = byte;
+      dataOut.push(byte);
+      // inByteIndex++;
     } else {
-      const numZeros = readByte(dataIn);
+      const numZeros: number = dataIn[inByteIndex]!;
+      inByteIndex++;
       memset(dataOut, 0, outByteIndex, numZeros);
       outByteIndex += numZeros;
     }
   }
 
-  return outByteIndex;
+  return new Uint8Array(dataOut);
 }

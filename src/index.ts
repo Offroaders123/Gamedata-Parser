@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import { decompress, runLengthDecode } from "./compression.js";
 
 export type Platform = "ps-vita" | "ps3" | "ps4" | "wii-u" | "xbox-360";
@@ -8,11 +8,9 @@ export const NAME_LENGTH = 128;
 
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
   if (platform === "ps-vita"){
-    console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
+    // console.log(Buffer.from(data.buffer, data.byteOffset, data.byteLength));
     data = runLengthDecode(data);
-    console.log(Buffer.compare(await readFile("./output.bin"), data));
     await writeFile("./output2.bin", data);
-    // data = await decompress(data, "deflate");
   }
 
   if (platform === "ps4"){
@@ -36,8 +34,8 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
   const decoder = new TextDecoder(littleEndian ? "utf-16" : "utf-16be");
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
 
-  const byteOffset: number = view.getUint32(0, littleEndian);
-  const byteLength: number = DEFINITION_LENGTH * view.getUint32(4, littleEndian);
+  const byteOffset: number = 0x00AADDFF;//view.getUint32(0, littleEndian);
+  const byteLength: number = DEFINITION_LENGTH * 18;//view.getUint32(4, littleEndian);
   console.log(byteOffset, byteLength);
 
   const files: File[] = [];
@@ -48,12 +46,12 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
       .split("\0")[0]!
       // Fixes the naming inconsistency for Nether files within the 'DIM-1' directory.
       .replace("DIM-1","DIM-1/");
-    console.log(name);
     const byteLength: number = view.getUint32(i + NAME_LENGTH, littleEndian);
     const byteOffset: number = view.getUint32(i + NAME_LENGTH + 4, littleEndian);
     files.push(new File([data.subarray(byteOffset, byteOffset + byteLength)], name));
   }
 
+  // console.log(files.map(file => file.name));
   return files;
 }
 

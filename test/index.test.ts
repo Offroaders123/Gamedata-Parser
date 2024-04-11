@@ -24,6 +24,7 @@ describe("Parse Gamedata", () => {
     it(platform, async () => {
       const data = new Uint8Array(await gamedata.arrayBuffer());
       const files = await readGamedata(data, platform);
+      if (files.length === 0) throw new Error("No files!");
 
       console.log(`--------- ${platform} ---------`);
       for (const file of files){

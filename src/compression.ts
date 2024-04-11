@@ -1,30 +1,27 @@
 export { compress, decompress } from "nbtify";
 
 /**
- * Decompresses Uint8Array data using the Vita Run-Length Encoding format.
+ * Decompresses Uint8Array data using the Run-Length Encoding format.
+ * 
+ * This variant is specific to PS Vita Edition.
 */
-export function runLengthDecode(data: Uint8Array): Uint8Array {
+export function runLengthDecode(data: Uint8Array, decompressedLength: number): Uint8Array {
   const compressedLength = data.byteLength;
-  const result: number[] = [];
+  const result = new Uint8Array(decompressedLength);
   let readOffset = 0;
   let writeOffset = 0;
 
   while (readOffset < compressedLength){
-    const suspectedTag: number = data[readOffset]!;
-    readOffset++;
+    const suspectedTag: number = data[readOffset++]!;
 
     if (suspectedTag !== 0){
-      result[writeOffset] = suspectedTag;
-      writeOffset++;
+      result[writeOffset++] = suspectedTag;
     } else {
-      const length: number = data[readOffset]!;
-      readOffset++;
-      for (let i = 0; i < length; i++){
-        result.push(0);
-        writeOffset++;
-      }
+      const length: number = data[readOffset++]!;
+      result.fill(0, writeOffset, length);
+      writeOffset += length;
     }
   }
 
-  return new Uint8Array(result);
+  return result;
 }

@@ -1,4 +1,3 @@
-import { writeFile } from "node:fs/promises";
 import { decompress, runLengthDecode } from "./compression.js";
 
 export type Platform = "ps-vita" | "ps3" | "ps4" | "wii-u" | "xbox-360";
@@ -9,7 +8,7 @@ export const NAME_LENGTH = 128;
 export async function readGamedata(data: Uint8Array, platform: Platform): Promise<File[]> {
   if (platform === "ps-vita"){
     data = runLengthDecode(data.subarray(8));
-    await writeFile("./output2.bin", data);
+    // await writeFile("./output2.bin", data);
   }
 
   if (platform === "ps4"){
@@ -29,7 +28,7 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
     // needs to be reimplemented
   }
 
-  const littleEndian: boolean = platform === "ps4";
+  const littleEndian: boolean = platform === "ps-vita" || platform === "ps4";
   const decoder = new TextDecoder(littleEndian ? "utf-16" : "utf-16be");
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
 
@@ -49,7 +48,6 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
     files.push(new File([data.subarray(byteOffset, byteOffset + byteLength)], name));
   }
 
-  // console.log(files.map(file => file.name));
   return files;
 }
 

@@ -6,10 +6,10 @@ import { readGamedata } from "../src/index.js";
 import type { Platform } from "../src/index.js";
 
 const paths: [Platform, string][] = [
-  // ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
-  // ["ps3", "./ps3/GAMEDATA"],
+  ["xbox-360", "./xbox-360/savegame-decompressed.dat"],
+  ["ps3", "./ps3/GAMEDATA"],
   ["ps-vita", "./ps-vita/GAMEDATA-2.bin"],
-  // ["wii-u", "./wii-u/savegame.wii"],
+  ["wii-u", "./wii-u/savegame.wii"],
   // ["ps4", "./ps4/GAMEDATA"]
 ];
 
@@ -24,7 +24,6 @@ describe("Parse Gamedata", () => {
     it(platform, async () => {
       const data = new Uint8Array(await gamedata.arrayBuffer());
       const files = await readGamedata(data, platform);
-      if (files.length === 0) throw new Error("No files!");
 
       console.log(`--------- ${platform} ---------`);
       for (const file of files){

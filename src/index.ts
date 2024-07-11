@@ -35,6 +35,8 @@ export async function readGamedata(data: Uint8Array, platform: Platform): Promis
 
   const byteOffset: number = view.getUint32(0, littleEndian);
   const byteLength: number = DEFINITION_LENGTH * view.getUint32(4, littleEndian);
+  const minVersion: number = view.getUint16(8, littleEndian);
+  const fileVersion: number = view.getUint16(10, littleEndian);
 
   const files: File[] = [];
 
